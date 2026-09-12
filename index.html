@@ -634,6 +634,103 @@
     <!-- Pestaña 4: Catálogos -->
     
     <!-- TAB AUDITORIA DE TURNOS -->
+    
+    <!-- Pestaña: Auditoría Rex+ API (Solapamientos) -->
+    <div id="tab-rexmas" class="tab-pane">
+        <div class="kpi-grid">
+            <div class="kpi-card red">
+                <div class="kpi-label">Inconsistencias Rex+ vs Licencias</div>
+                <div class="kpi-val" id="kpiRexCount">100</div>
+                <div class="kpi-sub">Solapamiento Simultáneo de Vacaciones y Reposo</div>
+            </div>
+            <div class="kpi-card green">
+                <div class="kpi-label">Ahorro Potencial Nómina</div>
+                <div class="kpi-val">$176,5M</div>
+                <div class="kpi-sub">Recuperación por Subsidio SIL</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Acción Exigida a RRHH</div>
+                <div class="kpi-val">Ajuste Inmediato</div>
+                <div class="kpi-sub">Corrección en Rex+ y Notificación a Jefatura</div>
+            </div>
+        </div>
+        <div class="filter-panel">
+            <input type="text" id="rexSearchInput" class="search-input" placeholder="Filtrar por Colaborador, RUT o Supervisor en Rex+..." onkeyup="filterRexTable()">
+            <button class="btn btn-success" onclick="exportRexCSV()">📥 Exportar Auditoría Rex+ CSV</button>
+        </div>
+        <div class="table-wrap">
+            <div class="table-header-bar">
+                <div class="table-title">Casos de Solapamiento Detectados entre Feriado Legal y Licencia Médica</div>
+            </div>
+            <div class="table-scroll">
+                <table id="rexAuditTable">
+                    <thead>
+                        <tr>
+                            <th>Empresa</th>
+                            <th>Período</th>
+                            <th>RUT</th>
+                            <th>Trabajador</th>
+                            <th>Líder Supervisor</th>
+                            <th>Días Licencia</th>
+                            <th>Días Vacaciones</th>
+                            <th>Fechas Solapadas</th>
+                            <th>Diagnóstico & Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody id="rexAuditBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pestaña: Alerta Supervisores Timesheet -->
+    <div id="tab-timesheet" class="tab-pane">
+        <div class="kpi-grid">
+            <div class="kpi-card red">
+                <div class="kpi-label">Personal Directo (DIR) Faltante</div>
+                <div class="kpi-val">28</div>
+                <div class="kpi-sub">Colaboradores con Horas Incompletas</div>
+            </div>
+            <div class="kpi-card amber">
+                <div class="kpi-label">Blindaje SIL Aplicado</div>
+                <div class="kpi-val">-8.0 hrs/día</div>
+                <div class="kpi-sub">Descuento Automático por Reposo Médico</div>
+            </div>
+            <div class="kpi-card green">
+                <div class="kpi-label">Sede Oficial Remitente</div>
+                <div class="kpi-val">Cerro El Plomo 5260</div>
+                <div class="kpi-sub">Firma: Pablo Andrés Leiva Mac-namara</div>
+            </div>
+        </div>
+        <div class="table-wrap">
+            <div class="table-header-bar">
+                <div class="table-title">Ranking de Supervisores Responsables y Personal Productivo Pendiente</div>
+            </div>
+            <div class="table-scroll">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Colaborador</th>
+                            <th>RUT</th>
+                            <th>Tipo M.Obra</th>
+                            <th>Líder / Supervisor a Notificar</th>
+                            <th>Área / Agencia</th>
+                            <th>Horas Faltantes</th>
+                            <th>Estado & Acción Exigida</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>GONZÁLEZ SOTO ANGÉLICA FERNANDA</td><td>16191713-3</td><td>DIR</td><td>MARÍA JOSÉ CONCHA</td><td>Hearts Cencosud</td><td><span class="badge badge-red">0 hrs cargadas</span></td><td><span class="badge badge-red">🚨 Notificar Supervisor</span></td></tr>
+                        <tr><td>RODRÍGUEZ HERRERO GABRIELA</td><td>17366710-8</td><td>DIR</td><td>HÉCTOR ANTONIO TRAILLANCA</td><td>OMD Medios</td><td><span class="badge badge-red">0 hrs cargadas</span></td><td><span class="badge badge-red">🚨 Notificar Supervisor</span></td></tr>
+                        <tr><td>ANGUITA QUEZADA ALEJANDRA JAVIERA</td><td>18706922-K</td><td>DIR</td><td>JAZMÍN RAILEF OSSES</td><td>PHD Entel</td><td><span class="badge badge-red">0 hrs cargadas</span></td><td><span class="badge badge-red">🚨 Notificar Supervisor</span></td></tr>
+                        <tr><td>REBOLLEDO MOSQUEIRA LIVAIN PITHS</td><td>18569316-3</td><td>DIR</td><td>ROBERTO ENRIQUE ALVAREZ</td><td>Hearts MultiCtas</td><td><span class="badge badge-amber">32 hrs faltantes</span></td><td><span class="badge badge-amber">⚠️ Regularizar en Portal</span></td></tr>
+                        <tr><td>VERGARA CUEVAS CAMILA FERNANDA</td><td>17106734-0</td><td>DIR</td><td>ROBERTO ANGELO MANCILLA</td><td>Hearts Cencosud</td><td><span class="badge badge-amber">40 hrs faltantes</span></td><td><span class="badge badge-amber">⚠️ Regularizar en Portal</span></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
     <div id="tab-turnos" class="tab-pane">
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 24px;">
             <div class="kpi-card" style="border-top: 4px solid var(--danger);">
