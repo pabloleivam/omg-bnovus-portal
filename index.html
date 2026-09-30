@@ -532,35 +532,45 @@
         <div class="kpi-grid">
             <div class="kpi-card">
                 <div class="kpi-label">Colaboradores Monitoreados</div>
-                <div class="kpi-val" id="kpiColabs">1,018</div>
+                <div class="kpi-val" id="kpiColabs">1.025</div>
                 <div class="kpi-sub">Total Plantilla Activa 2026</div>
             </div>
             <div class="kpi-card green">
                 <div class="kpi-label">Horas Totales Trabajadas</div>
-                <div class="kpi-val" id="kpiHoras">1,984,263</div>
+                <div class="kpi-val" id="kpiHoras">675.762 hrs</div>
                 <div class="kpi-sub">Horas Efectivas Bnovus</div>
             </div>
             <div class="kpi-card red">
-                <div class="kpi-label">Días Licencias Médicas</div>
-                <div class="kpi-val" id="kpiLicencias">18,557</div>
-                <div class="kpi-sub">Días Justificados por Salud</div>
+                <div class="kpi-label">Licencias Médicas (SIL)</div>
+                <div class="kpi-val" id="kpiLicencias">5.871 d <small style="font-size:12px; font-weight:normal; opacity:0.8;">(4.479 hábiles)</small></div>
+                <div class="kpi-sub">4.479 d Hábiles + 1.392 d Fin de Semana</div>
+            </div>
+            <div class="kpi-card blue">
+                <div class="kpi-label">Permisos Autorizados</div>
+                <div class="kpi-val" id="kpiPermisos">2.127 d</div>
+                <div class="kpi-sub">Especiales, Duelo, Cumpleaños, Salidas</div>
             </div>
             <div class="kpi-card amber">
-                <div class="kpi-label">Días Vacaciones</div>
-                <div class="kpi-val" id="kpiVacaciones">19,231</div>
-                <div class="kpi-sub">Feriados Legales Tomados</div>
+                <div class="kpi-label">Vacaciones Tomadas (2026)</div>
+                <div class="kpi-val" id="kpiVacaciones">5.377 d <small style="font-size:12px; font-weight:normal; opacity:0.8;">(Art. 67 CT)</small></div>
+                <div class="kpi-sub">Días Hábiles Legales (Art. 67 CT)</div>
             </div>
-            <div class="kpi-card red">
-                <div class="kpi-label">Total Ausencias</div>
-                <div class="kpi-val" id="kpiAusencias">51,848</div>
-                <div class="kpi-sub">Jornadas Incompletas / Sin Just.</div>
+            <div class="kpi-card green">
+                <div class="kpi-label">Vacaciones Disponibles (Rex+)</div>
+                <div class="kpi-val" id="kpiVacDisponibles">17.003,2 d</div>
+                <div class="kpi-sub">Saldo Acumulado Pendiente</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Total Ausencias Registradas</div>
+                <div class="kpi-val" id="kpiAusencias">16.684 <small style="font-size:12px; font-weight:normal; opacity:0.8;">(15.357 háb)</small></div>
+                <div class="kpi-sub">15.357 Hábiles + 1.327 Fin de Semana</div>
             </div>
             <div class="kpi-card info">
                 <div class="kpi-label">Total Horas Atrasos</div>
-                <div class="kpi-val" id="kpiAtrasos">185.7 hrs</div>
+                <div class="kpi-val" id="kpiAtrasos">3.314 min</div>
                 <div class="kpi-sub">Entradas Tardías Acumuladas</div>
             </div>
-        </div>
+</div>
 
         <div class="table-wrap" style="margin-bottom: 24px;">
             <div class="table-header-bar">
@@ -573,8 +583,9 @@
                             <th>Empresa</th>
                             <th>Oficina</th>
                             <th>Colaboradores</th>
-                            <th>Días Licencia</th>
-                            <th>Días Vacaciones</th>
+                            <th>Licencias (SIL)</th>
+                            <th>Permisos</th>
+                            <th>Vacaciones</th>
                             <th>Ausencias</th>
                             <th>Horas Trabajadas</th>
                         </tr>
@@ -594,8 +605,9 @@
                         <tr>
                             <th>Mes</th>
                             <th>Colaboradores Activos</th>
-                            <th>Días Licencia Médica</th>
-                            <th>Días Vacaciones</th>
+                            <th>Licencias Médicas (SIL)</th>
+                            <th>Permisos</th>
+                            <th>Vacaciones</th>
                             <th>Ausencias</th>
                             <th>Horas Totales</th>
                         </tr>
@@ -1248,7 +1260,22 @@
             }
         }
 
+        function updateGerencialKPIs() {
+            if (!BNOVUS_DATA || !BNOVUS_DATA.kpis) return;
+            const k = BNOVUS_DATA.kpis;
+            if (document.getElementById('kpiColabs')) document.getElementById('kpiColabs').textContent = (k.colabs || 0).toLocaleString('es-CL');
+            if (document.getElementById('kpiHoras')) document.getElementById('kpiHoras').textContent = Math.round(k.horas || 0).toLocaleString('es-CL');
+            if (document.getElementById('kpiLicencias')) document.getElementById('kpiLicencias').innerHTML = (k.licencias || 0).toLocaleString('es-CL') + ' d <small style="font-size:12px; font-weight:normal; opacity:0.8;">(' + (k.licencias_habiles || 0).toLocaleString('es-CL') + ' hábiles)</small>';
+            if (document.getElementById('kpiPermisos')) document.getElementById('kpiPermisos').textContent = (k.permisos || 0).toLocaleString('es-CL') + ' d';
+            if (document.getElementById('kpiVacaciones')) document.getElementById('kpiVacaciones').innerHTML = (k.vacaciones_tomadas || k.vacaciones || 0).toLocaleString('es-CL') + ' d <small style="font-size:12px; font-weight:normal; opacity:0.8;">(Art. 67 CT)</small>';
+            if (document.getElementById('kpiVacDisponibles')) document.getElementById('kpiVacDisponibles').textContent = (k.vacaciones_disponibles || 0).toLocaleString('es-CL', {minimumFractionDigits: 1, maximumFractionDigits: 1}) + ' d';
+            if (document.getElementById('kpiAusencias')) document.getElementById('kpiAusencias').innerHTML = (k.ausencias || 0).toLocaleString('es-CL') + ' <small style="font-size:12px; font-weight:normal; opacity:0.8;">(' + (k.ausencias_habiles || 0).toLocaleString('es-CL') + ' háb)</small>';
+            if (document.getElementById('kpiAtrasos')) document.getElementById('kpiAtrasos').textContent = Math.round(k.atrasos || 0).toLocaleString('es-CL') + ' min';
+        }
+
         function renderGerencial() {
+            updateGerencialKPIs();
+
             // Tabla Empresas
             const tbodyEmp = document.getElementById('empresaTableBody');
             tbodyEmp.innerHTML = '';
@@ -1258,10 +1285,11 @@
                     <td style="font-weight: 600;">${e.empresa}</td>
                     <td><span class="badge badge-blue">${e.Oficina}</span></td>
                     <td style="text-align: right; font-weight: 700;">${e.colabs.toLocaleString('es-CL')}</td>
-                    <td style="text-align: right; color: #FCA5A5;">${e.licencias.toLocaleString('es-CL')}</td>
-                    <td style="text-align: right; color: #FCD34D;">${e.vacaciones.toLocaleString('es-CL')}</td>
+                    <td style="text-align: right; color: #FCA5A5;">${e.licencias.toLocaleString('es-CL')} d</td>
+                    <td style="text-align: right; color: #60A5FA;">${(e.permisos || 0).toLocaleString('es-CL')} d</td>
+                    <td style="text-align: right; color: #FCD34D;">${e.vacaciones.toLocaleString('es-CL')} d</td>
                     <td style="text-align: right; color: #F87171;">${e.ausencias.toLocaleString('es-CL')}</td>
-                    <td style="text-align: right; font-weight: 600;">${e.horas.toLocaleString('es-CL')} hrs</td>
+                    <td style="text-align: right; font-weight: 600;">${Math.round(e.horas).toLocaleString('es-CL')} hrs</td>
                 `;
                 tbodyEmp.appendChild(tr);
             });
@@ -1274,10 +1302,11 @@
                 tr.innerHTML = `
                     <td style="font-weight: 700; color: #38BDF8;">${m.mes}</td>
                     <td style="text-align: right; font-weight: 600;">${m.colabs.toLocaleString('es-CL')}</td>
-                    <td style="text-align: right; color: #FCA5A5;">${m.licencias.toLocaleString('es-CL')}</td>
-                    <td style="text-align: right; color: #FCD34D;">${m.vacaciones.toLocaleString('es-CL')}</td>
+                    <td style="text-align: right; color: #FCA5A5;">${m.licencias.toLocaleString('es-CL')} d</td>
+                    <td style="text-align: right; color: #60A5FA;">${(m.permisos || 0).toLocaleString('es-CL')} d</td>
+                    <td style="text-align: right; color: #FCD34D;">${m.vacaciones.toLocaleString('es-CL')} d</td>
                     <td style="text-align: right; color: #F87171;">${m.ausencias.toLocaleString('es-CL')}</td>
-                    <td style="text-align: right; font-weight: 600;">${m.horas.toLocaleString('es-CL')} hrs</td>
+                    <td style="text-align: right; font-weight: 600;">${Math.round(m.horas).toLocaleString('es-CL')} hrs</td>
                 `;
                 tbodyMes.appendChild(tr);
             });
@@ -1295,7 +1324,7 @@
                     <td>${r.supervisor}</td>
                     <td>${r.area}</td>
                     <td><span class="badge badge-blue">${r.oficina}</span></td>
-                    <td style="text-align: right; font-weight: 800; color: #EF4444;"><span class="badge badge-red">${r.dias_licencia} días</span></td>
+                    <td style="text-align: right; font-weight: 800; color: #EF4444;"><span class="badge badge-red" title="${r.dias_licencia} días corridos prescritos (${r.dias_licencia_habiles || 0} hábiles + ${r.dias_licencia_fds || 0} fin de semana)">${r.dias_licencia} d <small style="opacity:0.85;">(${r.dias_licencia_habiles || 0}h)</small></span></td>
                     <td style="text-align: right;">${r.meses_licencia} meses</td>
                 `;
                 tbody.appendChild(tr);
