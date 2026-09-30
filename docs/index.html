@@ -1487,7 +1487,8 @@
         function exportFilteredCSV() {
             let csv = 'RUT,Nombre,Empresa,Supervisor,Area,Oficina,DiasTrabajados,Licencias_SIL_Corridas,Licencias_SIL_Habiles,Permisos_Dias,Vacaciones_Habiles_Tomadas,Vacaciones_Disponibles_Rex,Ausencias_Totales,Ausencias_Habiles,HorasTotales\n';
             currentFilteredColabs.forEach(c => {
-                csv += `"${c.rut}","${c.nombre}","${c.empresa}","${c.supervisor}","${c.area}","${c.oficina}",${c.diasTrabajados},${c.diasLicencias},${c.diasLicenciasHabiles || 0},${c.diasPermisos || 0},${c.diasVacaciones},${c.vacacionesDisponibles || 0},${c.totalAusencias},${c.totalAusenciasHabiles || 0},${c.totalHoras}\n`;
+                const clean = s => (s || '').toString().replace(/"/g, '""');
+                csv += `"${clean(c.rut)}","${clean(c.nombre)}","${clean(c.empresa)}","${clean(c.supervisor)}","${clean(c.area)}","${clean(c.oficina)}",${c.diasTrabajados || 0},${c.diasLicencias || 0},${c.diasLicenciasHabiles || 0},${c.diasPermisos || 0},${c.diasVacaciones || 0},${c.vacacionesDisponibles || 0},${c.totalAusencias || 0},${c.totalAusenciasHabiles || 0},${c.totalHoras || 0}\n`;
             });
             downloadFile(csv, 'colaboradores_bnovus_filtrados.csv', 'text/csv;charset=utf-8;');
         }
@@ -1514,7 +1515,11 @@
         }
 
         function downloadFile(content, fileName, mimeType) {
-            const blob = new Blob([content], {type: mimeType});
+            // Inyectar BOM UTF-8 (\uFEFF) para compatibilidad nativa con Microsoft Excel (Windows y Mac)
+            const isCsv = fileName.toLowerCase().endsWith('.csv') || (mimeType && mimeType.includes('csv'));
+            const utf8Bom = '\uFEFF';
+            const blobParts = (isCsv && !content.startsWith(utf8Bom)) ? [utf8Bom, content] : [content];
+            const blob = new Blob(blobParts, {type: (mimeType || 'text/csv') + ';charset=utf-8;'});
             const a = document.createElement('a');
             a.href = URL.createObjectURL(blob);
             a.download = fileName;
@@ -1600,17 +1605,12 @@
         function exportarTurnosCSV() {
             const headers = ["Periodo", "Sede", "Empresa", "Agencia", "RUT", "Colaborador", "Supervisor", "Dias_Oficina_Plan", "Asistio_Oficina", "Faltas_Oficina", "Pct_Cumplimiento", "Dias_Licencia", "Dias_Vacaciones"];
             const rows = TURNOS_DATA.map(r => [
-                r.periodo_mes, r.Sede, `"${r.Empresa || ''}"`, `"${r.Agencia || ''}"`, r.Rut, `"${r.Nombre || ''}"`, `"${r.Nombre_Supervisor || ''}"`,
+                r.periodo_mes, r.Sede, `"${(r.Empresa || '').replace(/"/g, '""')}"`, `"${(r.Agencia || '').replace(/"/g, '""')}"`, r.Rut, `"${(r.Nombre || '').replace(/"/g, '""')}"`, `"${(r.Nombre_Supervisor || '').replace(/"/g, '""')}"`,
                 r.dias_oficina_programados, r.dias_asistidos_oficina, r.dias_incumplimiento_oficina, r.tasa_cumplimiento_oficina_pct,
                 r.dias_licencia, r.dias_vacaciones
             ]);
             let csv = headers.join(",") + "\n" + rows.map(r => r.join(",")).join("\n");
-            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'Auditoria_Cumplimiento_Turnos_Bnovus.csv';
-            a.click();
+            downloadFile(csv, 'Auditoria_Cumplimiento_Turnos_Hibridos_2026.csv', 'text/csv;charset=utf-8;');
         }
 
         // Inicializar tabla de turnos al cargar
