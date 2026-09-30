@@ -1207,7 +1207,7 @@
                 tr.onclick = () => openModal(c);
 
                 const licBadge = c.diasLicencias > 0 
-                    ? `<span class="badge badge-red" title="${c.diasLicencias} días corridos prescritos (${c.diasLicenciasHabiles || 0} hábiles + ${c.diasLicenciasFds || 0} fds)">${c.diasLicencias} d <small style="opacity:0.85;">(${c.diasLicenciasHabiles || 0}h)</small></span>` 
+                    ? `<span class="badge badge-red" title="${c.diasLicencias} días corridos prescritos (${c.diasLicenciasHabiles || 0} hábiles + ${c.diasLicenciasFds || 0} fds)">${c.diasLicencias} d <small style="opacity:0.85;">(${c.diasLicenciasHabiles || 0} háb.)</small></span>` 
                     : '<span style="color: var(--text-muted);">0</span>';
                 
                 const permBadge = (c.diasPermisos > 0)
@@ -1324,7 +1324,7 @@
                     <td>${r.supervisor}</td>
                     <td>${r.area}</td>
                     <td><span class="badge badge-blue">${r.oficina}</span></td>
-                    <td style="text-align: right; font-weight: 800; color: #EF4444;"><span class="badge badge-red" title="${r.dias_licencia} días corridos prescritos (${r.dias_licencia_habiles || 0} hábiles + ${r.dias_licencia_fds || 0} fin de semana)">${r.dias_licencia} d <small style="opacity:0.85;">(${r.dias_licencia_habiles || 0}h)</small></span></td>
+                    <td style="text-align: right; font-weight: 800; color: #EF4444;"><span class="badge badge-red" title="${r.dias_licencia} días corridos prescritos (${r.dias_licencia_habiles || 0} hábiles + ${r.dias_licencia_fds || 0} fin de semana)">${r.dias_licencia} d <small style="opacity:0.85;">(${r.dias_licencia_habiles || 0} háb.)</small></span></td>
                     <td style="text-align: right;">${r.meses_licencia} meses</td>
                 `;
                 tbody.appendChild(tr);
